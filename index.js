@@ -3,11 +3,9 @@ const vision = require("@google-cloud/vision");
 const fs = require("fs");
 
 async function setEndpoint() {
-  // Specifies the location of the api endpoint
-  const clientOptions = { apiEndpoint: "eu-vision.googleapis.com" };
 
   // Creates a client
-  const client = new vision.ImageAnnotatorClient(clientOptions);
+  const client = new vision.ImageAnnotatorClient();
 
   // Performs text detection on the image file
   const bucketName = "test-data-pqwknlanx";
@@ -21,7 +19,7 @@ async function setEndpoint() {
     )
   );
   const finalText = results
-    .map((result) => result[0].fullTextAnnotation.text)
+    .map((result) => result[0].fullTextAnnotation.text.replace(/\n/g, " "))
     .join("\n\n\n");
   fs.writeFileSync("covid_19_project.txt", finalText);
 }
